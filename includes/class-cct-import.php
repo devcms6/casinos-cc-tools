@@ -190,6 +190,7 @@ class CCT_Import {
 
 		$status = sanitize_key( $_POST['status'] ?? 'keep' );
 		$done   = 0;
+		$drafts = 0;
 		foreach ( $preview as $p ) {
 			if ( $p['errors'] ) {
 				continue;
@@ -199,10 +200,17 @@ class CCT_Import {
 			$id       = CCT_Profiles::save( $p['data'], $existing, $st );
 			if ( ! is_wp_error( $id ) ) {
 				$done++;
+				if ( 'draft' === $st ) {
+					$drafts++;
+				}
 			}
 		}
 
-		CCT_Admin::flash( sprintf( _n( '%d profile imported.', '%d profiles imported.', $done, 'casinos-cc-tools' ), $done ) );
+		$msg = sprintf( _n( '%d profile imported.', '%d profiles imported.', $done, 'casinos-cc-tools' ), $done );
+		if ( $drafts ) {
+			$msg .= ' ' . sprintf( _n( '%d is a draft: its tools stay hidden until you set it to Live.', '%d are drafts: their tools stay hidden until you set them to Live.', $drafts, 'casinos-cc-tools' ), $drafts );
+		}
+		CCT_Admin::flash( $msg );
 		wp_safe_redirect( admin_url( 'admin.php?page=' . CCT_Admin::SLUG ) );
 		exit;
 	}

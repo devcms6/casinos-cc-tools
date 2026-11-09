@@ -59,14 +59,37 @@ class CCT_Shortcodes {
 			return self::admin_notice( __( 'Unknown tool type. Use type="wagering" or type="withdrawal".', 'casinos-cc-tools' ) );
 		}
 
-		$profile_id = $atts['casino'] ? CCT_Profiles::find_by_slug( $atts['casino'] ) : CCT_Profiles::find_for_post( get_the_ID() );
-		if ( ! $profile_id || 'publish' !== get_post_status( $profile_id ) ) {
-			return self::admin_notice( __( 'No published tool profile found for this casino.', 'casinos-cc-tools' ) );
+		// Some themes render content outside the loop, where get_the_ID() is empty.
+		$page_id = get_the_ID() ?: get_queried_object_id();
+
+		if ( $atts['casino'] ) {
+			$profile_id = CCT_Profiles::find_by_slug( $atts['casino'] );
+			if ( ! $profile_id ) {
+				/* translators: %s: slug */
+				return self::admin_notice( sprintf( __( 'No tool profile has the slug "%s". Check the casino="…" value against Casino Tools → Casinos.', 'casinos-cc-tools' ), $atts['casino'] ) );
+			}
+		} else {
+			$profile_id = CCT_Profiles::find_for_post( $page_id );
+			if ( ! $profile_id ) {
+				$chain = CCT_Profiles::chain( $page_id );
+				return self::admin_notice( sprintf(
+					/* translators: 1: post IDs, 2: slugs */
+					__( 'No tool profile is linked to this page. Checked post IDs %1$s and slugs %2$s. In the casino’s profile, set "Review page" to one of these IDs, or add casino="slug" to the shortcode.', 'casinos-cc-tools' ),
+					$chain ? implode( ', ', $chain ) : '(none)',
+					$chain ? implode( ', ', array_filter( array_map( function ( $id ) { return get_post_field( 'post_name', $id ); }, $chain ) ) ) : '(none)'
+				) );
+			}
+		}
+
+		if ( 'publish' !== get_post_status( $profile_id ) ) {
+			/* translators: %s: casino name */
+			return self::admin_notice( sprintf( __( 'The %s tool profile is a draft. Set its status to Live in Casino Tools → Casinos to show the tool.', 'casinos-cc-tools' ), get_the_title( $profile_id ) ) );
 		}
 
 		$data = CCT_Profiles::get_data( $profile_id );
 		if ( ! $data || empty( $data[ $type ]['enabled'] ) ) {
-			return self::admin_notice( __( 'This tool is switched off in the casino’s tool profile.', 'casinos-cc-tools' ) );
+			/* translators: %s: casino name */
+			return self::admin_notice( sprintf( __( 'This tool is switched off in the %s tool profile.', 'casinos-cc-tools' ), get_the_title( $profile_id ) ) );
 		}
 
 		wp_enqueue_style( 'cct-tools' );

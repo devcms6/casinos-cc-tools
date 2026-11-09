@@ -79,28 +79,54 @@ class CCT_Profiles {
 		return $posts ? (int) $posts[0] : 0;
 	}
 
+	/** Profile linked to a review post. Includes drafts, so callers can explain why a tool is hidden. */
 	public static function find_by_review( $review_post_id ) {
+		if ( ! $review_post_id ) {
+			return 0;
+		}
 		$posts = get_posts( array(
 			'post_type'      => self::POST_TYPE,
-			'post_status'    => 'publish',
+			'post_status'    => array( 'publish', 'draft' ),
 			'posts_per_page' => 1,
 			'fields'         => 'ids',
+			'orderby'        => 'post_status', // "publish" sorts after "draft": prefer the live one
+			'order'          => 'DESC',
 			'meta_key'       => self::META_REVIEW,
-			'meta_value'     => (int) $review_post_id,
+			'meta_value'     => (string) (int) $review_post_id,
 		) );
 		return $posts ? (int) $posts[0] : 0;
 	}
 
+	/** The page and all its parents, nearest first. */
+	public static function chain( $post_id ) {
+		$post_id = (int) $post_id;
+		if ( ! $post_id ) {
+			return array();
+		}
+		return array_merge( array( $post_id ), array_map( 'intval', get_post_ancestors( $post_id ) ) );
+	}
+
 	/**
-	 * Find the profile for a page: the page itself, then its parents.
-	 * /golazzo-casino/bonuses/ (child) resolves to /golazzo-casino/ (review).
+	 * Find the profile for a page:
+	 * 1. a profile linked to the page or one of its parents (review_post_id), then
+	 * 2. a profile whose slug equals the URL slug of the page or one of its parents
+	 *    (/golazzo-casino/bonuses/ → golazzo-casino).
 	 */
 	public static function find_for_post( $post_id ) {
-		$ids = array_merge( array( (int) $post_id ), array_map( 'intval', get_post_ancestors( $post_id ) ) );
+		$ids = self::chain( $post_id );
 		foreach ( $ids as $id ) {
 			$found = self::find_by_review( $id );
 			if ( $found ) {
 				return $found;
+			}
+		}
+		foreach ( $ids as $id ) {
+			$slug = get_post_field( 'post_name', $id );
+			if ( $slug ) {
+				$found = self::find_by_slug( $slug );
+				if ( $found ) {
+					return $found;
+				}
 			}
 		}
 		return 0;
