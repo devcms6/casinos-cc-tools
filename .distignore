@@ -1,0 +1,9 @@
+.git
+.github
+.gitignore
+.distignore
+build
+tests
+node_modules
+*.zip
+.DS_Store

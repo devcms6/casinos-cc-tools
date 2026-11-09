@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "casino": {
+    "slug": "golazzo-casino",
+    "name": "Golazzo Casino",
+    "review_url": "https://casinos.cc/golazzo-casino/",
+    "currency": "EUR",
+    "brandfinder_analysis_id": 349,
+    "verified_at": "2026-05-01"
+  },
+  "wagering": {
+    "enabled": true,
+    "max_bet": 5,
+    "days": 7,
+    "activate_hours": 2,
+    "excluded_methods": ["Skrill", "Neteller", "Volt"],
+    "win_cap": { "multiplier": 10, "countries": ["Brazil", "Chile", "Japan", "Peru", "Thailand"] },
+    "contribution_note": "Expected cost assumes slots count 100% towards wagering. It's an average, not a prediction.",
+    "offers": [
+      { "id": "w1", "name": "Welcome – 1st deposit", "kind": "deposit", "match_pct": 100, "max_bonus": 500, "min_deposit": 20, "wagering_x": 35, "wagering_base": "deposit_bonus", "extras": "50 FS + €5 Free Bet", "extras_min_deposit": 30 },
+      { "id": "w2", "name": "Welcome – 2nd deposit", "kind": "deposit", "match_pct": 100, "max_bonus": 750, "min_deposit": 20, "wagering_x": 35, "wagering_base": "deposit_bonus", "extras": "50 FS + €5 Free Bet", "extras_min_deposit": 30 },
+      { "id": "w3", "name": "Welcome – 3rd deposit", "kind": "deposit", "match_pct": 100, "max_bonus": 750, "min_deposit": 20, "wagering_x": 35, "wagering_base": "deposit_bonus", "extras": "100 FS + €10 Free Bet", "extras_min_deposit": 30 },
+      { "id": "weekly-boost", "name": "Weekly Boost (Mon–Thu)", "kind": "deposit", "match_pct": 50, "max_bonus": 1000, "min_deposit": 20, "wagering_x": 35, "wagering_base": "deposit_bonus", "extras": "100 FS" },
+      { "id": "weekend-reload", "name": "Weekend Casino Reload", "kind": "deposit", "match_pct": 50, "max_bonus": 750, "min_deposit": 20, "wagering_x": 35, "wagering_base": "deposit_bonus", "extras": "50 FS", "extras_min_deposit": 30 },
+      { "id": "mvp", "name": "MVP Bonus", "kind": "deposit", "match_pct": 50, "max_bonus": 5000, "min_deposit": 1000, "wagering_x": 35, "wagering_base": "deposit_bonus" },
+      { "id": "sunday-fs", "name": "Sunday Special – 100 FS", "kind": "spins", "wagering_x": 40, "wagering_base": "winnings", "description": "100 free spins on Johnny Cash. Winnings are wagered 40x. Minimum deposit €20 on Sunday." }
+    ],
+    "sources": "Wagering, max bet, deadlines, excluded methods and win caps come from Golazzo's promotion terms (BrandFinder 349). Offer split and minimum deposits come from the Golazzo Casino Bonuses review."
+  },
+  "withdrawal": {
+    "enabled": true,
+    "default_time": { "bank": "Up to 7 days", "other": "Up to 72 hours" },
+    "methods": [
+      { "name": "Visa", "type": "card", "withdrawals": "no" },
+      { "name": "Mastercard", "type": "card", "withdrawals": "no" },
+      { "name": "Revolut Mastercard", "type": "card", "withdrawals": "no" },
+      { "name": "Flexepin", "type": "voucher", "withdrawals": "no" },
+      { "name": "MiFinity", "type": "ewallet", "withdrawals": "yes", "min_withdrawal": 20 },
+      { "name": "Jeton", "type": "ewallet", "withdrawals": "yes", "min_withdrawal": 20 },
+      { "name": "Bitcoin", "type": "crypto", "withdrawals": "yes", "min_withdrawal": 55 },
+      { "name": "Ethereum", "type": "crypto", "withdrawals": "yes", "min_withdrawal": 55 },
+      { "name": "Tether", "type": "crypto", "withdrawals": "yes", "min_withdrawal": 55 },
+      { "name": "Ripple", "type": "crypto", "withdrawals": "yes", "min_withdrawal": 55 },
+      { "name": "Cardano", "type": "crypto", "withdrawals": "yes", "min_withdrawal": 50 },
+      { "name": "USD Coin", "type": "crypto", "withdrawals": "yes", "min_withdrawal": 55 },
+      { "name": "Dogecoin", "type": "crypto", "withdrawals": "yes", "min_withdrawal": 55 },
+      { "name": "Litecoin", "type": "crypto", "withdrawals": "yes", "min_withdrawal": 55 },
+      { "name": "Bitcoin Cash", "type": "crypto", "withdrawals": "yes", "min_withdrawal": 55 },
+      { "name": "Solana", "type": "crypto", "withdrawals": "yes", "min_withdrawal": 20 },
+      { "name": "Bank transfer", "type": "bank", "withdrawals": "yes", "min_withdrawal": 20 },
+      { "name": "Interac", "type": "bank", "withdrawals": "unknown" },
+      { "name": "Sofort", "type": "bank", "withdrawals": "unknown" }
+    ],
+    "limits": [
+      { "label": "Level 1 – Qualification", "daily": 700, "weekly": 2250, "monthly": 9000 },
+      { "label": "Level 2 – Group Stage", "daily": 1000, "weekly": 3500, "monthly": 14000 },
+      { "label": "Level 3 – Quarter-Final", "daily": 1200, "weekly": 5000, "monthly": 20000 },
+      { "label": "Level 4 – Final", "daily": 1500, "weekly": 7000, "monthly": 28000 },
+      { "label": "Level 5 – Trophy Lift", "daily": 2000, "weekly": 10000, "monthly": 40000 }
+    ],
+    "sources": "Methods and minimums come from Golazzo's payments list (BrandFinder 349). VIP limits and processing times come from the Golazzo Casino Withdrawal review. Golazzo doesn't publish withdrawal fees."
+  }
+}

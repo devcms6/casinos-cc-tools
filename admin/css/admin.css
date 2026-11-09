@@ -1,0 +1,42 @@
+/* Casinos.cc Tools – admin screens. Uses WordPress admin styles where possible. */
+.cct-admin .cct-box{background:#fff;border:1px solid #dcdcde;border-radius:4px;padding:16px 20px;margin:16px 0}
+.cct-admin .cct-box > h2:first-child{margin-top:0;font-size:15px}
+.cct-admin .cct-box h3{font-size:13px;margin:18px 0 8px}
+.cct-admin .cct-box--narrow{max-width:760px}
+.cct-admin .cct-layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:20px;align-items:start}
+@media (max-width:1100px){.cct-admin .cct-layout{grid-template-columns:minmax(0,1fr)}}
+.cct-admin .cct-side{position:sticky;top:46px}
+.cct-admin .cct-side select{width:100%}
+.cct-admin .cct-side__links{margin-bottom:0}
+.cct-admin .cct-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:4px 20px}
+.cct-admin .cct-grid--1{grid-template-columns:minmax(0,1fr)}
+.cct-admin .cct-field{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.cct-admin .cct-field label{font-weight:600}
+.cct-admin .cct-field .regular-text{width:100%}
+.cct-admin .cct-field .description{font-size:12px}
+.cct-admin .cct-tabs{margin-bottom:0}
+.cct-admin .cct-rep__scroll{overflow-x:auto}
+.cct-admin .cct-rep__table{min-width:880px}
+.cct-admin .cct-rep__table th{font-size:12px;padding:6px 6px}
+.cct-admin .cct-rep__table td{padding:4px 6px;vertical-align:middle}
+.cct-admin .cct-rep__table input,.cct-admin .cct-rep__table select{width:100%;min-width:70px}
+.cct-admin .cct-rep__table select{min-width:120px}
+.cct-admin .cct-rep__wide{min-width:180px}
+.cct-admin .cct-rep__actions{width:28px;text-align:center}
+.cct-admin .cct-rep__remove{color:#b32d2e;font-size:14px}
+.cct-admin .cct-pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:600;line-height:18px;margin:1px 2px 1px 0}
+.cct-admin .cct-pill--on{background:#d1f0d5;color:#0a6b1a}
+.cct-admin .cct-pill--off{background:#f0f0f1;color:#8c8f94}
+.cct-admin .cct-pill--new{background:#dbeeff;color:#0a4b78}
+.cct-admin .cct-pill--err{background:#fcdcdc;color:#8a1f11}
+.cct-admin .cct-pill--draft{background:#fcf0c3;color:#6b5000}
+.cct-admin .cct-muted{color:#8c8f94}
+.cct-admin .cct-ok{color:#0a6b1a;font-weight:600}
+.cct-admin .cct-error{color:#b32d2e}
+.cct-admin .cct-msgs{margin:4px 0 0 18px;list-style:disc}
+.cct-admin .cct-msgs--err li{color:#8a1f11}
+.cct-admin .cct-msgs--warn li{color:#6b5000}
+.cct-admin .cct-list td{vertical-align:top}
+.cct-admin .cct-empty{background:#fff;border:1px dashed #c3c4c7;padding:30px;text-align:center;margin-top:16px}
+.cct-admin .cct-pages{margin:0}
+.cct-admin #cct-json{font-size:12px;line-height:1.5;tab-size:2}
