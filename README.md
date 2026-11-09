@@ -24,12 +24,8 @@ That's the only manual upload. After this, updates come from GitHub.
 ### Publishing a new version
 
 1. Bump the version in **both** places in `casinos-cc-tools.php`: the `Version:` header and `CCT_VERSION`.
-2. Commit, then tag and push:
-   ```bash
-   git tag v0.2.0
-   git push origin main v0.2.0
-   ```
-3. The **Release** workflow checks the versions match, lints the PHP, builds `casinos-cc-tools.zip` and publishes the release.
+2. Commit and push to `main`.
+3. The **Release** workflow sees a version with no release yet. It checks both version numbers match, lints the PHP, builds `casinos-cc-tools.zip` and publishes release `vX.Y.Z`. Pushes that don't change the version are skipped.
 
 ## Adding a casino
 

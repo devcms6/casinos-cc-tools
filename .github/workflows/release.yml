@@ -1,14 +1,21 @@
-# Builds casinos-cc-tools.zip and publishes a GitHub release when a version tag is pushed.
-#   git tag v0.2.0 && git push origin v0.2.0
+# Publishes a GitHub release with casinos-cc-tools.zip whenever main carries a plugin
+# version that has no release yet. To release: bump Version and CCT_VERSION in
+# casinos-cc-tools.php, then push to main. Pushing a tag vX.Y.Z also works.
 # WordPress sites running the plugin pick the release up through "Check for updates".
 name: Release
 
 on:
   push:
+    branches: [main]
     tags: ['v*']
+  workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -16,29 +23,50 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check the tag matches the plugin version
+      - name: Read and check the plugin version
+        id: version
         run: |
-          TAG="${GITHUB_REF_NAME#v}"
           HEADER=$(grep -m1 -E '^\s*\*\s*Version:' casinos-cc-tools.php | sed -E 's/.*Version:\s*//' | tr -d '[:space:]')
           CONST=$(grep -m1 "define( 'CCT_VERSION'" casinos-cc-tools.php | sed -E "s/.*'CCT_VERSION', '([^']+)'.*/\1/")
-          echo "tag=$TAG header=$HEADER const=$CONST"
-          if [ "$TAG" != "$HEADER" ] || [ "$TAG" != "$CONST" ]; then
-            echo "::error::Tag v$TAG does not match Version ($HEADER) and CCT_VERSION ($CONST) in casinos-cc-tools.php"
+          echo "header=$HEADER const=$CONST"
+          if [ "$HEADER" != "$CONST" ]; then
+            echo "::error::Version header ($HEADER) and CCT_VERSION ($CONST) differ in casinos-cc-tools.php"
             exit 1
+          fi
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "${GITHUB_REF_NAME#v}" != "$HEADER" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match plugin version $HEADER"
+            exit 1
+          fi
+          echo "version=$HEADER" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if this version is already released
+        id: exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "Release v${{ steps.version.outputs.version }} already exists. Nothing to do."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Lint PHP
+        if: steps.exists.outputs.skip == 'false'
         run: find . -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
 
       - name: Build zip
+        if: steps.exists.outputs.skip == 'false'
         run: |
           mkdir -p build/casinos-cc-tools
           rsync -a ./ build/casinos-cc-tools/ --exclude-from=.distignore
           cd build && zip -rq casinos-cc-tools.zip casinos-cc-tools
 
       - name: Publish release
+        if: steps.exists.outputs.skip == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" build/casinos-cc-tools.zip \
-            --title "$GITHUB_REF_NAME" --generate-notes
+          V="v${{ steps.version.outputs.version }}"
+          gh release create "$V" build/casinos-cc-tools.zip \
+            --target "$GITHUB_SHA" --title "$V" --generate-notes
