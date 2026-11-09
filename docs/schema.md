@@ -8,6 +8,8 @@ Rules that apply everywhere:
 - Amounts are plain numbers in the casino's currency: `20`, not `"€20"`.
 - Leave a field out (or set it to `null`) when the fact isn't known. The tool hides the row or warning instead of guessing. Never invent a value.
 - Text fields are plain text. HTML is stripped.
+- Under every tool the site shows “Based on [casino name]’s terms and conditions.”, followed by the tool’s public note. Public notes must not mention research tools, data sources or dates.
+- `brandfinder_analysis_id`, `verified_at` and `sources` are internal. They are never sent to the page.
 
 ## `casino`
 
@@ -18,7 +20,7 @@ Rules that apply everywhere:
 | `review_url` or `review_post_id` | recommended | The main review page. Shortcodes on this page and its child pages find the profile automatically. |
 | `currency` | yes | 3-letter code, e.g. `EUR`, `CAD` |
 | `brandfinder_analysis_id` | no | BrandFinder analysis the facts came from |
-| `verified_at` | recommended | `YYYY-MM-DD` date the facts were checked. Shown under the tool. |
+| `verified_at` | recommended | `YYYY-MM-DD` date the facts were checked. Internal: shown in the admin only. |
 
 ## `wagering` (Wagering calculator)
 
@@ -30,8 +32,8 @@ Rules that apply everywhere:
 | `activate_hours` | Hours to activate the bonus after depositing |
 | `excluded_methods` | Deposit methods that don't qualify for bonuses, e.g. `["Skrill","Neteller"]` |
 | `win_cap.multiplier` / `win_cap.countries` | Max win as a multiple of the bonus, and the countries it applies to |
-| `contribution_note` | Free-text note shown under the tool |
-| `sources` | Where the facts came from. Shown under the tool. |
+| `contribution_note` | Public note shown under the tool, after “Based on [casino]’s terms and conditions.” |
+| `sources` | Where the facts came from. **Internal**: shown in the admin only, never on the site. |
 | `offers` | List of offers, below |
 
 ### Offer
@@ -68,7 +70,8 @@ BrandFinder wagering strings map like this:
 | `methods` | List of payment methods, below |
 | `default_time.other` / `default_time.bank` | Processing time used when a method has none of its own |
 | `limits` | Withdrawal limits per VIP level: `label`, `daily`, `weekly`, `monthly` (any can be omitted). Leave the list empty for no limits; the VIP field is then hidden. |
-| `sources` | Where the facts came from |
+| `note` | Public note shown under the tool, after “Based on [casino]’s terms and conditions.” |
+| `sources` | Where the facts came from. **Internal**: never shown on the site. |
 
 ### Method
 

@@ -89,15 +89,13 @@ $excluded      = $tool['excluded_methods'];
 		</div>
 	</div>
 
-	<?php if ( $tool['sources'] || $tool['contribution_note'] || $casino['verified_at'] ) : ?>
-	<p class="src">
-		<?php if ( $tool['sources'] ) : ?><b><?php esc_html_e( 'Sources.', 'casinos-cc-tools' ); ?></b> <?php echo esc_html( $tool['sources'] ); ?> <?php endif; ?>
-		<?php echo esc_html( $tool['contribution_note'] ); ?>
-		<?php if ( $casino['verified_at'] ) : ?><?php
-			/* translators: %s: date */
-			printf( esc_html__( 'Last checked %s.', 'casinos-cc-tools' ), esc_html( date_i18n( get_option( 'date_format' ), strtotime( $casino['verified_at'] ) ) ) ); ?><?php endif; ?>
-	</p>
-	<?php endif; ?>
+	<p class="src"><?php
+		/* translators: %s: casino name */
+		printf( esc_html__( 'Based on %s’s terms and conditions.', 'casinos-cc-tools' ), esc_html( $casino['name'] ) );
+		if ( $tool['contribution_note'] ) {
+			echo ' ' . esc_html( $tool['contribution_note'] );
+		}
+	?></p>
 
 	<script type="application/json" class="cct-data"><?php echo $json; // phpcs:ignore WordPress.Security.EscapeOutput -- JSON with HEX_TAG/AMP/APOS ?></script>
 </div>

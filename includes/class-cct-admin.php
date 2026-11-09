@@ -166,8 +166,8 @@ class CCT_Admin {
 								'help' => $c['review_post_id'] && get_post( $c['review_post_id'] ) ? sprintf( __( 'Linked: %s', 'casinos-cc-tools' ), get_the_title( $c['review_post_id'] ) ) : __( 'Paste the main review URL, e.g. https://casinos.cc/golazzo-casino/', 'casinos-cc-tools' ),
 							) ); ?>
 							<?php self::text( 'cct[casino][currency]', __( 'Currency', 'casinos-cc-tools' ), $c['currency'], array( 'class' => 'small-text', 'maxlength' => 3 ) ); ?>
-							<?php self::text( 'cct[casino][brandfinder_analysis_id]', __( 'BrandFinder analysis ID', 'casinos-cc-tools' ), $c['brandfinder_analysis_id'], array( 'type' => 'number' ) ); ?>
-							<?php self::text( 'cct[casino][verified_at]', __( 'Facts checked on', 'casinos-cc-tools' ), $c['verified_at'], array( 'type' => 'date' ) ); ?>
+							<?php self::text( 'cct[casino][brandfinder_analysis_id]', __( 'BrandFinder analysis ID (internal)', 'casinos-cc-tools' ), $c['brandfinder_analysis_id'], array( 'type' => 'number' ) ); ?>
+							<?php self::text( 'cct[casino][verified_at]', __( 'Facts checked on (internal)', 'casinos-cc-tools' ), $c['verified_at'], array( 'type' => 'date' ) ); ?>
 						</div>
 					</div>
 
@@ -200,8 +200,8 @@ class CCT_Admin {
 						) ); ?>
 
 						<div class="cct-grid cct-grid--1">
-							<?php self::text( 'cct[wagering][contribution_note]', __( 'Game contribution note', 'casinos-cc-tools' ), $w['contribution_note'] ); ?>
-							<?php self::textarea( 'cct[wagering][sources]', __( 'Sources (shown under the tool)', 'casinos-cc-tools' ), $w['sources'] ); ?>
+							<?php self::text( 'cct[wagering][contribution_note]', __( 'Public note (shown under the tool)', 'casinos-cc-tools' ), $w['contribution_note'], array( 'help' => __( 'Shown after “Based on [casino]’s terms and conditions.”', 'casinos-cc-tools' ) ) ); ?>
+							<?php self::textarea( 'cct[wagering][sources]', __( 'Internal sources (never shown on the site)', 'casinos-cc-tools' ), $w['sources'] ); ?>
 						</div>
 					</div>
 
@@ -233,7 +233,8 @@ class CCT_Admin {
 						) ); ?>
 
 						<div class="cct-grid cct-grid--1">
-							<?php self::textarea( 'cct[withdrawal][sources]', __( 'Sources (shown under the tool)', 'casinos-cc-tools' ), $wd['sources'] ); ?>
+							<?php self::text( 'cct[withdrawal][note]', __( 'Public note (shown under the tool)', 'casinos-cc-tools' ), $wd['note'], array( 'help' => __( 'Shown after “Based on [casino]’s terms and conditions.”', 'casinos-cc-tools' ) ) ); ?>
+							<?php self::textarea( 'cct[withdrawal][sources]', __( 'Internal sources (never shown on the site)', 'casinos-cc-tools' ), $wd['sources'] ); ?>
 						</div>
 					</div>
 				</div>

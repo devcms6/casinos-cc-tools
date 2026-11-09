@@ -22,14 +22,18 @@ Rules:
      Skip sports offers, cashback and wheel or lottery promotions.
    - Map "35x (D+B)" to wagering_x 35 + wagering_base "deposit_bonus" (see the mapping table in schema.md).
    - Take max_bet, days, activate_hours, excluded_methods and win_cap from terms_clauses. Quote the clause id for
-     each in "sources".
+     each in "sources" (internal, never shown on the site).
 5. Withdrawal:
    - Add every BrandFinder payment method. supports_withdrawal 1/0/null → "yes"/"no"/"unknown".
    - Convert "€20.00" to 20.
    - VIP limits and processing times usually come from the casinos.cc Withdrawal review. Say so in "sources".
-6. casino.verified_at = the BrandFinder analysis finish date (YYYY-MM-DD). casino.currency = the main currency
+   - withdrawal.note: one short public sentence, e.g. "<Casino> doesn't publish withdrawal fees.", or leave it out.
+6. Public text ("contribution_note", withdrawal "note", offer names and descriptions) must not mention
+   BrandFinder, casinos.cc research, analysis IDs or dates. The site already adds
+   "Based on <casino>'s terms and conditions." under each tool.
+7. casino.verified_at = the BrandFinder analysis finish date (YYYY-MM-DD). casino.currency = the main currency
    the review uses.
-7. After the JSON, list every field you left empty and why, and every value that came from casinos.cc rather
+8. After the JSON, list every field you left empty and why, and every value that came from casinos.cc rather
    than BrandFinder.
 ```
 

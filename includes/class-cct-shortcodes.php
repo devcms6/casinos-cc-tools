@@ -100,7 +100,14 @@ class CCT_Shortcodes {
 		$class  = 'cct-widget' . ( in_array( strtolower( $atts['boxed'] ), array( '1', 'yes', 'true' ), true ) ? ' cct-widget--boxed' : '' );
 		$casino = $data['casino'];
 		$tool   = $data[ $type ];
-		$json   = CCT_Schema::encode( array( 'casino' => $casino, 'tool' => $tool ), false );
+		// Only what the widget needs goes into the page. Internal fields (sources,
+		// research IDs, check dates) stay in the admin.
+		$public = $tool;
+		unset( $public['sources'] );
+		$json = CCT_Schema::encode( array(
+			'casino' => array( 'name' => $casino['name'], 'currency' => $casino['currency'] ),
+			'tool'   => $public,
+		), false );
 
 		ob_start();
 		include CCT_DIR . 'public/views/' . $type . '.php';

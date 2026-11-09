@@ -44,6 +44,7 @@ class CCT_Schema {
 				'methods'      => array(),
 				'default_time' => array( 'bank' => '', 'other' => '' ),
 				'limits'       => array(),
+				'note'         => '',
 				'sources'      => '',
 			),
 		);
@@ -163,6 +164,7 @@ class CCT_Schema {
 		$wd = isset( $input['withdrawal'] ) && is_array( $input['withdrawal'] ) ? $input['withdrawal'] : array();
 		$d['withdrawal']['enabled'] = ! empty( $wd['enabled'] );
 		$d['withdrawal']['sources'] = self::str( $wd, 'sources' );
+		$d['withdrawal']['note']    = self::str( $wd, 'note' );
 		$dt                         = isset( $wd['default_time'] ) && is_array( $wd['default_time'] ) ? $wd['default_time'] : array();
 		$d['withdrawal']['default_time'] = array( 'bank' => self::str( $dt, 'bank' ), 'other' => self::str( $dt, 'other' ) );
 
@@ -219,7 +221,7 @@ class CCT_Schema {
 			$warnings[] = __( 'No tool is enabled for this casino.', 'casinos-cc-tools' );
 		}
 		if ( ! $d['casino']['verified_at'] ) {
-			$warnings[] = __( 'casino.verified_at is empty. Add the date the facts were checked.', 'casinos-cc-tools' );
+			$warnings[] = __( 'casino.verified_at is empty. Add the date the facts were checked (internal, not shown on the site).', 'casinos-cc-tools' );
 		}
 
 		return array( 'data' => $d, 'errors' => $errors, 'warnings' => $warnings );
