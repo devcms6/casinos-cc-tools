@@ -3,7 +3,7 @@
  * Plugin Name:       Casinos.cc Tools
  * Plugin URI:        https://github.com/devcms6/casinos-cc-tools
  * Description:       Interactive casino tools (wagering calculator, withdrawal checker) driven by per-casino tool profiles. Manual entry or JSON import.
- * Version:           0.1.4
+ * Version:           0.2.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Casinos.cc
@@ -15,7 +15,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'CCT_VERSION', '0.1.4' );
+define( 'CCT_VERSION', '0.2.0' );
 define( 'CCT_FILE', __FILE__ );
 define( 'CCT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCT_URL', plugin_dir_url( __FILE__ ) );
@@ -33,6 +33,7 @@ require_once CCT_DIR . 'includes/class-cct-schema.php';
 require_once CCT_DIR . 'includes/class-cct-profiles.php';
 require_once CCT_DIR . 'includes/class-cct-shortcodes.php';
 require_once CCT_DIR . 'includes/class-cct-updater.php';
+require_once CCT_DIR . 'includes/class-cct-autoinsert.php';
 
 if ( is_admin() ) {
 	require_once CCT_DIR . 'includes/class-cct-admin.php';
@@ -45,6 +46,7 @@ add_action( 'plugins_loaded', function () {
 	CCT_Profiles::init();
 	CCT_Shortcodes::init();
 	CCT_Updater::init();
+	CCT_AutoInsert::init();
 
 	if ( is_admin() ) {
 		CCT_Admin::init();

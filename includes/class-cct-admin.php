@@ -58,6 +58,13 @@ class CCT_Admin {
 			<hr class="wp-header-end">
 			<?php self::flash(); ?>
 
+			<?php $previews = CCT_AutoInsert::previews(); if ( $previews ) : ?>
+				<div class="notice notice-info cct-bulk"><p>
+					<?php echo esc_html( sprintf( _n( '%d tool is in preview (visible to editors only).', '%d tools are in preview (visible to editors only).', count( $previews ), 'casinos-cc-tools' ), count( $previews ) ) ); ?>
+					<a class="button button-primary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=cct_placement_bulk' ), 'cct_placement_bulk' ) ); ?>"><?php esc_html_e( 'Make all previews live', 'casinos-cc-tools' ); ?></a>
+				</p></div>
+			<?php endif; ?>
+
 			<?php if ( ! $profiles ) : ?>
 				<div class="cct-empty">
 					<h2><?php esc_html_e( 'No casinos yet', 'casinos-cc-tools' ); ?></h2>
@@ -68,7 +75,7 @@ class CCT_Admin {
 				<thead><tr>
 					<th><?php esc_html_e( 'Casino', 'casinos-cc-tools' ); ?></th>
 					<th><?php esc_html_e( 'Review page', 'casinos-cc-tools' ); ?></th>
-					<th><?php esc_html_e( 'Tools', 'casinos-cc-tools' ); ?></th>
+					<th><?php esc_html_e( 'Tools on the site', 'casinos-cc-tools' ); ?></th>
 					<th><?php esc_html_e( 'Facts checked', 'casinos-cc-tools' ); ?></th>
 					<th><?php esc_html_e( 'BrandFinder', 'casinos-cc-tools' ); ?></th>
 					<th><?php esc_html_e( 'Updated', 'casinos-cc-tools' ); ?></th>
@@ -91,9 +98,11 @@ class CCT_Admin {
 						</td>
 						<td><?php if ( $review && get_post( $review ) ) : ?><a href="<?php echo esc_url( get_permalink( $review ) ); ?>" target="_blank"><?php echo esc_html( get_the_title( $review ) ); ?></a><?php else : ?><span class="cct-muted">—</span><?php endif; ?></td>
 						<td>
-							<?php foreach ( array( 'wagering' => __( 'Wagering', 'casinos-cc-tools' ), 'withdrawal' => __( 'Withdrawal', 'casinos-cc-tools' ) ) as $k => $label ) : ?>
-								<span class="cct-pill <?php echo ! empty( $d[ $k ]['enabled'] ) ? 'cct-pill--on' : 'cct-pill--off'; ?>"><?php echo esc_html( $label ); ?></span>
-							<?php endforeach; ?>
+							<?php if ( 'publish' === $p->post_status ) : ?>
+								<?php echo CCT_AutoInsert::controls( $p->ID, 'wagering', $d ) . CCT_AutoInsert::controls( $p->ID, 'withdrawal', $d ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped inside ?>
+							<?php else : ?>
+								<span class="cct-muted"><?php esc_html_e( 'Set the profile to Live first', 'casinos-cc-tools' ); ?></span>
+							<?php endif; ?>
 						</td>
 						<td><?php echo $d['casino']['verified_at'] ? esc_html( $d['casino']['verified_at'] ) : '<span class="cct-muted">—</span>'; ?></td>
 						<td><?php echo $d['casino']['brandfinder_analysis_id'] ? '#' . (int) $d['casino']['brandfinder_analysis_id'] : '<span class="cct-muted">—</span>'; ?></td>
@@ -102,7 +111,7 @@ class CCT_Admin {
 				<?php endforeach; ?>
 				</tbody>
 			</table>
-			<p class="description"><?php esc_html_e( 'Add [cc_wagering_calculator] or [cc_withdrawal_checker] to a casino’s review or any of its subpages. The casino is found from the page’s parent.', 'casinos-cc-tools' ); ?></p>
+			<p class="description"><?php esc_html_e( '“Insert & preview” places the tool after the first heading of the casino’s Bonuses or Withdrawal page, visible only to logged-in editors. “Go live” shows it to everyone. You can still add [cc_wagering_calculator] or [cc_withdrawal_checker] by hand instead; a page that already has a tool is left alone.', 'casinos-cc-tools' ); ?></p>
 			<?php endif; ?>
 		</div>
 		<?php
@@ -267,6 +276,13 @@ class CCT_Admin {
 							</p>
 						<?php endif; ?>
 					</div>
+					<?php if ( $profile_id && 'publish' === $status ) : ?>
+					<div class="cct-box">
+						<h2><?php esc_html_e( 'On the site', 'casinos-cc-tools' ); ?></h2>
+						<?php echo CCT_AutoInsert::controls( $profile_id, 'wagering', $d ) . CCT_AutoInsert::controls( $profile_id, 'withdrawal', $d ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<p class="description"><?php esc_html_e( 'Inserted after the first heading of the page. Save changes to the profile first.', 'casinos-cc-tools' ); ?></p>
+					</div>
+					<?php endif; ?>
 					<?php if ( $c['review_post_id'] && get_post( $c['review_post_id'] ) ) : ?>
 					<div class="cct-box">
 						<h2><?php esc_html_e( 'Pages', 'casinos-cc-tools' ); ?></h2>

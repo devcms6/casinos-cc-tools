@@ -121,3 +121,8 @@
 @media (prefers-reduced-motion:reduce){
 	.cct-widget .cct__bar{transition:none}
 }
+
+/* Preview wrapper (editors only) */
+.cct-preview{outline:2px dashed #f19120;outline-offset:8px;border-radius:12px;margin:18px 0 30px}
+.cct-preview__bar{background:#fff3e0;color:#8a4b00;font-size:13px;font-weight:600;border-radius:8px;padding:8px 12px;margin-bottom:10px}
+.cct-preview__bar a{color:#8a4b00;text-decoration:underline}

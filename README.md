@@ -39,6 +39,16 @@ That's the only manual upload. After this, updates come from GitHub.
 
 Every save and import keeps a revision, so you can roll a casino back from its edit screen.
 
+## Putting the tools on the pages
+
+Casino Tools → Casinos shows each tool's state on the site:
+
+1. **Insert & preview** puts the tool on the casino's `/bonuses/` (wagering calculator) or `/withdrawal/` (withdrawal checker) page, right after the first heading that follows the page title, and opens the page. Only logged-in editors see it, with an orange "Preview" bar.
+2. **Go live** shows it to everyone. **Make all previews live** does this for every tool in preview at once.
+3. **Remove** takes it off the page.
+
+The page content is never edited: the tool is added to the finished page HTML, so it works with ACF flexible-content modules. A page that already contains a tool (for example a shortcode) is left alone. Going live or removing clears the page cache for WP Rocket, W3 Total Cache, WP Super Cache and LiteSpeed; other caches can hook `cct_purge_page_cache`.
+
 ## Shortcodes
 
 | Shortcode | Notes |

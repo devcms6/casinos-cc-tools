@@ -40,3 +40,9 @@
 .cct-admin .cct-empty{background:#fff;border:1px dashed #c3c4c7;padding:30px;text-align:center;margin-top:16px}
 .cct-admin .cct-pages{margin:0}
 .cct-admin #cct-json{font-size:12px;line-height:1.5;tab-size:2}
+.cct-admin .cct-place{margin:2px 0 6px;line-height:1.6}
+.cct-admin .cct-place__name{display:inline-block;min-width:140px;color:#50575e}
+.cct-admin .cct-place__links{white-space:nowrap}
+.cct-admin .cct-place__remove{color:#b32d2e}
+.cct-admin .cct-side .cct-place__name{display:block}
+.cct-admin .cct-bulk .button{margin-left:8px;vertical-align:middle}
