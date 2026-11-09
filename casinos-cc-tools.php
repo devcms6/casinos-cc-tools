@@ -3,7 +3,7 @@
  * Plugin Name:       Casinos.cc Tools
  * Plugin URI:        https://github.com/devcms6/casinos-cc-tools
  * Description:       Interactive casino tools (wagering calculator, withdrawal checker) driven by per-casino tool profiles. Manual entry or JSON import.
- * Version:           0.1.3
+ * Version:           0.1.4
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Casinos.cc
@@ -15,7 +15,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'CCT_VERSION', '0.1.3' );
+define( 'CCT_VERSION', '0.1.4' );
 define( 'CCT_FILE', __FILE__ );
 define( 'CCT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCT_URL', plugin_dir_url( __FILE__ ) );

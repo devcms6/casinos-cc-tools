@@ -2,7 +2,7 @@
 
 Paste the prompt below into Claude (with the BrandFinder connector enabled), filling in the two placeholders. Claude returns one JSON file you import in **Casino Tools → Import JSON**.
 
-Imports default to **Draft**. Check the warnings on the preview screen, then open the profile and check the facts marked below before switching it to **Live**.
+Imported profiles go **Live** straight away. Check the warnings on the preview screen before you confirm. To keep a tool hidden while you check it, set `"enabled": false` for that tool in the JSON, or set the profile to Draft afterwards.
 
 ---
 

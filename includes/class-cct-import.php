@@ -97,14 +97,7 @@ class CCT_Import {
 			</table>
 
 			<?php if ( $ok ) : ?>
-			<p class="cct-field">
-				<label for="cct-import-status"><?php esc_html_e( 'Save imported profiles as', 'casinos-cc-tools' ); ?></label>
-				<select name="status" id="cct-import-status">
-					<option value="keep"><?php esc_html_e( 'Keep current status (new casinos as draft)', 'casinos-cc-tools' ); ?></option>
-					<option value="draft"><?php esc_html_e( 'Draft – hide the tools until checked', 'casinos-cc-tools' ); ?></option>
-					<option value="publish"><?php esc_html_e( 'Live – tools show on the site now', 'casinos-cc-tools' ); ?></option>
-				</select>
-			</p>
+			<p class="description"><?php esc_html_e( 'Imported profiles are saved as Live, so their tools show on the site straight away. Tools switched off in the JSON stay off.', 'casinos-cc-tools' ); ?></p>
 			<p>
 				<?php submit_button( sprintf( _n( 'Import %d profile', 'Import %d profiles', $ok, 'casinos-cc-tools' ), $ok ), 'primary', 'submit', false ); ?>
 				<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=cct-import' ) ); ?>"><?php esc_html_e( 'Cancel', 'casinos-cc-tools' ); ?></a>
@@ -188,29 +181,20 @@ class CCT_Import {
 		}
 		delete_transient( self::key( $token ) );
 
-		$status = sanitize_key( $_POST['status'] ?? 'keep' );
-		$done   = 0;
-		$drafts = 0;
+		// Imports always go live. Use the profile's Status field to hide a casino later.
+		$done = 0;
 		foreach ( $preview as $p ) {
 			if ( $p['errors'] ) {
 				continue;
 			}
 			$existing = CCT_Profiles::find_by_slug( $p['data']['casino']['slug'] );
-			$st       = 'keep' === $status ? ( $existing ? get_post_status( $existing ) : 'draft' ) : $status;
-			$id       = CCT_Profiles::save( $p['data'], $existing, $st );
+			$id       = CCT_Profiles::save( $p['data'], $existing, 'publish' );
 			if ( ! is_wp_error( $id ) ) {
 				$done++;
-				if ( 'draft' === $st ) {
-					$drafts++;
-				}
 			}
 		}
 
-		$msg = sprintf( _n( '%d profile imported.', '%d profiles imported.', $done, 'casinos-cc-tools' ), $done );
-		if ( $drafts ) {
-			$msg .= ' ' . sprintf( _n( '%d is a draft: its tools stay hidden until you set it to Live.', '%d are drafts: their tools stay hidden until you set them to Live.', $drafts, 'casinos-cc-tools' ), $drafts );
-		}
-		CCT_Admin::flash( $msg );
+		CCT_Admin::flash( sprintf( _n( '%d profile imported and live.', '%d profiles imported and live.', $done, 'casinos-cc-tools' ), $done ) );
 		wp_safe_redirect( admin_url( 'admin.php?page=' . CCT_Admin::SLUG ) );
 		exit;
 	}

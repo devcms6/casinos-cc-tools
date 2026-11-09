@@ -31,7 +31,7 @@ That's the only manual upload. After this, updates come from GitHub.
 
 **By hand:** Casino Tools → Add casino. Fill in the casino, switch on the tools you want, add offers, methods and limits. Save as Draft until the facts are checked.
 
-**From JSON:** Casino Tools → Import JSON. Upload or paste one profile or many. The preview shows what will be created or updated, with errors and warnings, before anything is saved. Profiles are matched by `casino.slug`, so re-importing updates instead of duplicating.
+**From JSON:** Casino Tools → Import JSON. Upload or paste one profile or many. The preview shows what will be created or updated, with errors and warnings, before anything is saved. Profiles are matched by `casino.slug`, so re-importing updates instead of duplicating. Imported profiles are always saved as Live; tools switched off in the JSON stay off.
 
 - JSON format: [docs/schema.md](docs/schema.md) and [docs/schema.json](docs/schema.json)
 - Example: [examples/golazzo-casino.json](examples/golazzo-casino.json)
