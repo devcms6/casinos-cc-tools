@@ -13,7 +13,7 @@ Casino review URL: <https://casinos.cc/…/>
 BrandFinder analysis ID: <id>
 
 Rules:
-1. Follow docs/schema.md in the didoivanov/casinos-cc-tools repository exactly. Output one JSON object and nothing else.
+1. Follow docs/schema.md in the devcms6/casinos-cc-tools repository exactly. Output one JSON object and nothing else.
 2. Use only facts from BrandFinder (sections: bonuses, bonus_details, terms_clauses, payment_methods, currencies)
    and from the casino's own casinos.cc review pages. If a fact is in neither, leave the field out. Never guess.
 3. Translate non-English source text into English for "name", "extras" and "description".

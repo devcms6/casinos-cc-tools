@@ -1,21 +1,21 @@
 <?php
 /**
  * Plugin Name:       Casinos.cc Tools
- * Plugin URI:        https://github.com/didoivanov/casinos-cc-tools
+ * Plugin URI:        https://github.com/devcms6/casinos-cc-tools
  * Description:       Interactive casino tools (wagering calculator, withdrawal checker) driven by per-casino tool profiles. Manual entry or JSON import.
- * Version:           0.1.1
+ * Version:           0.1.2
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Casinos.cc
  * License:           GPL-2.0-or-later
  * Text Domain:       casinos-cc-tools
  * Domain Path:       /languages
- * Update URI:        https://github.com/didoivanov/casinos-cc-tools
+ * Update URI:        https://github.com/devcms6/casinos-cc-tools
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'CCT_VERSION', '0.1.1' );
+define( 'CCT_VERSION', '0.1.2' );
 define( 'CCT_FILE', __FILE__ );
 define( 'CCT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCT_URL', plugin_dir_url( __FILE__ ) );
@@ -26,7 +26,7 @@ define( 'CCT_SCHEMA_VERSION', 1 );
  * define( 'CCT_GITHUB_REPO', 'owner/repo' );
  */
 if ( ! defined( 'CCT_GITHUB_REPO' ) ) {
-	define( 'CCT_GITHUB_REPO', 'didoivanov/casinos-cc-tools' );
+	define( 'CCT_GITHUB_REPO', 'devcms6/casinos-cc-tools' );
 }
 
 require_once CCT_DIR . 'includes/class-cct-schema.php';

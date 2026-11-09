@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/didoivanov/casinos-cc-tools/docs/schema.json",
+  "$id": "https://github.com/devcms6/casinos-cc-tools/docs/schema.json",
   "title": "Casinos.cc Tools profile",
   "type": "object",
   "required": [
