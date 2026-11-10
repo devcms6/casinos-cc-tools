@@ -39,6 +39,17 @@ That's the only manual upload. After this, updates come from GitHub.
 
 Every save and import keeps a revision, so you can roll a casino back from its edit screen.
 
+## The Casinos list
+
+Casino Tools → Casinos is a standard WordPress list:
+
+- **Pagination**: 20 per page by default; change it under **Screen Options** (top right).
+- **Search** by casino name or slug.
+- **Views**: All / Live / Draft, with counts.
+- **Filters**: Wagering calculator on/off, Withdrawal checker on/off, and On the site (no tool on a page / any tool in preview / any tool live).
+- **Sorting** by casino, facts-checked date or last update.
+- **Bulk actions** on the ticked casinos: Publish (set to Live), Set to Draft, Insert tools & preview, Put tools live on pages, Remove tools from pages, Delete. After a bulk action you return to the same search, filters and page.
+
 ## Putting the tools on the pages
 
 Casino Tools → Casinos shows each tool's state on the site:

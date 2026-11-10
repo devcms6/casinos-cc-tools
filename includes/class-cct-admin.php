@@ -18,6 +18,12 @@ class CCT_Admin {
 		add_action( 'admin_post_cct_delete_profile', array( __CLASS__, 'handle_delete' ) );
 		add_action( 'admin_post_cct_export_profile', array( __CLASS__, 'handle_export' ) );
 		add_action( 'admin_post_cct_save_settings', array( __CLASS__, 'handle_settings' ) );
+		add_filter( 'set-screen-option', function ( $keep, $option, $value ) {
+			return CCT_List_Table::PER_PAGE_OPTION === $option ? max( 1, min( 500, (int) $value ) ) : $keep;
+		}, 10, 3 );
+		add_filter( 'set_screen_option_' . CCT_List_Table::PER_PAGE_OPTION, function ( $keep, $option, $value ) {
+			return max( 1, min( 500, (int) $value ) );
+		}, 10, 3 );
 		add_filter( 'plugin_action_links_' . plugin_basename( CCT_FILE ), function ( $links ) {
 			array_unshift( $links, '<a href="' . esc_url( admin_url( 'admin.php?page=' . self::SLUG ) ) . '">' . esc_html__( 'Casinos', 'casinos-cc-tools' ) . '</a>' );
 			return $links;
@@ -26,7 +32,8 @@ class CCT_Admin {
 
 	public static function menu() {
 		add_menu_page( __( 'Casino Tools', 'casinos-cc-tools' ), __( 'Casino Tools', 'casinos-cc-tools' ), self::CAP, self::SLUG, array( __CLASS__, 'page_list' ), 'dashicons-calculator', 58 );
-		add_submenu_page( self::SLUG, __( 'Casinos', 'casinos-cc-tools' ), __( 'Casinos', 'casinos-cc-tools' ), self::CAP, self::SLUG, array( __CLASS__, 'page_list' ) );
+		$hook = add_submenu_page( self::SLUG, __( 'Casinos', 'casinos-cc-tools' ), __( 'Casinos', 'casinos-cc-tools' ), self::CAP, self::SLUG, array( __CLASS__, 'page_list' ) );
+		add_action( 'load-' . $hook, array( __CLASS__, 'load_list' ) );
 		add_submenu_page( self::SLUG, __( 'Add casino', 'casinos-cc-tools' ), __( 'Add casino', 'casinos-cc-tools' ), self::CAP, 'cct-edit', array( __CLASS__, 'page_edit' ) );
 		add_submenu_page( self::SLUG, __( 'Import JSON', 'casinos-cc-tools' ), __( 'Import JSON', 'casinos-cc-tools' ), self::CAP, 'cct-import', array( 'CCT_Import', 'page' ) );
 		add_submenu_page( self::SLUG, __( 'Settings', 'casinos-cc-tools' ), __( 'Settings', 'casinos-cc-tools' ), 'manage_options', 'cct-settings', array( __CLASS__, 'page_settings' ) );
@@ -42,14 +49,32 @@ class CCT_Admin {
 
 	/* ------------------------------------------------------------------ list */
 
-	public static function page_list() {
-		$profiles = get_posts( array(
-			'post_type'      => CCT_Profiles::POST_TYPE,
-			'post_status'    => array( 'publish', 'draft' ),
-			'posts_per_page' => -1,
-			'orderby'        => 'title',
-			'order'          => 'ASC',
+	/** Runs before the Casinos screen prints: screen options and bulk actions. */
+	public static function load_list() {
+		add_screen_option( 'per_page', array(
+			'label'   => __( 'Casinos per page', 'casinos-cc-tools' ),
+			'default' => 20,
+			'option'  => CCT_List_Table::PER_PAGE_OPTION,
 		) );
+
+		$msg = CCT_List_Table::process_bulk();
+		if ( null !== $msg ) {
+			self::flash( $msg );
+			// back to the same view, keeping search, filters, sorting and page
+			$keep = array();
+			foreach ( array( 's', 'status', 'wagering', 'withdrawal', 'placement', 'orderby', 'order', 'paged' ) as $k ) {
+				if ( isset( $_REQUEST[ $k ] ) && '' !== $_REQUEST[ $k ] ) { // phpcs:ignore WordPress.Security.NonceVerification
+					$keep[ $k ] = sanitize_text_field( wp_unslash( $_REQUEST[ $k ] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+				}
+			}
+			wp_safe_redirect( add_query_arg( $keep, admin_url( 'admin.php?page=' . self::SLUG ) ) );
+			exit;
+		}
+	}
+
+	public static function page_list() {
+		$table = new CCT_List_Table();
+		$table->prepare_items();
 		?>
 		<div class="wrap cct-admin">
 			<h1 class="wp-heading-inline"><?php esc_html_e( 'Casino Tools', 'casinos-cc-tools' ); ?></h1>
@@ -65,54 +90,16 @@ class CCT_Admin {
 				</p></div>
 			<?php endif; ?>
 
-			<?php if ( ! $profiles ) : ?>
-				<div class="cct-empty">
-					<h2><?php esc_html_e( 'No casinos yet', 'casinos-cc-tools' ); ?></h2>
-					<p><?php esc_html_e( 'Add a casino by hand, or import a JSON file generated from BrandFinder facts.', 'casinos-cc-tools' ); ?></p>
-				</div>
-			<?php else : ?>
-			<table class="widefat striped cct-list">
-				<thead><tr>
-					<th><?php esc_html_e( 'Casino', 'casinos-cc-tools' ); ?></th>
-					<th><?php esc_html_e( 'Review page', 'casinos-cc-tools' ); ?></th>
-					<th><?php esc_html_e( 'Tools on the site', 'casinos-cc-tools' ); ?></th>
-					<th><?php esc_html_e( 'Facts checked', 'casinos-cc-tools' ); ?></th>
-					<th><?php esc_html_e( 'BrandFinder', 'casinos-cc-tools' ); ?></th>
-					<th><?php esc_html_e( 'Updated', 'casinos-cc-tools' ); ?></th>
-				</tr></thead>
-				<tbody>
-				<?php foreach ( $profiles as $p ) :
-					$d      = CCT_Profiles::get_data( $p->ID ) ?: CCT_Schema::blank();
-					$review = (int) ( $d['casino']['review_post_id'] ?? 0 );
-					$edit   = admin_url( 'admin.php?page=cct-edit&profile=' . $p->ID );
-					?>
-					<tr>
-						<td>
-							<strong><a href="<?php echo esc_url( $edit ); ?>"><?php echo esc_html( $p->post_title ); ?></a></strong>
-							<?php if ( 'draft' === $p->post_status ) : ?> — <span class="cct-pill cct-pill--draft"><?php esc_html_e( 'Draft', 'casinos-cc-tools' ); ?></span><?php endif; ?>
-							<div class="row-actions">
-								<a href="<?php echo esc_url( $edit ); ?>"><?php esc_html_e( 'Edit', 'casinos-cc-tools' ); ?></a> |
-								<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=cct_export_profile&profile=' . $p->ID ), 'cct_export_' . $p->ID ) ); ?>"><?php esc_html_e( 'Export JSON', 'casinos-cc-tools' ); ?></a> |
-								<span class="trash"><a class="cct-confirm" data-confirm="<?php esc_attr_e( 'Delete this tool profile? The tools disappear from its pages.', 'casinos-cc-tools' ); ?>" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=cct_delete_profile&profile=' . $p->ID ), 'cct_delete_' . $p->ID ) ); ?>"><?php esc_html_e( 'Delete', 'casinos-cc-tools' ); ?></a></span>
-							</div>
-						</td>
-						<td><?php if ( $review && get_post( $review ) ) : ?><a href="<?php echo esc_url( get_permalink( $review ) ); ?>" target="_blank"><?php echo esc_html( get_the_title( $review ) ); ?></a><?php else : ?><span class="cct-muted">—</span><?php endif; ?></td>
-						<td>
-							<?php if ( 'publish' === $p->post_status ) : ?>
-								<?php echo CCT_AutoInsert::controls( $p->ID, 'wagering', $d ) . CCT_AutoInsert::controls( $p->ID, 'withdrawal', $d ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped inside ?>
-							<?php else : ?>
-								<span class="cct-muted"><?php esc_html_e( 'Set the profile to Live first', 'casinos-cc-tools' ); ?></span>
-							<?php endif; ?>
-						</td>
-						<td><?php echo $d['casino']['verified_at'] ? esc_html( $d['casino']['verified_at'] ) : '<span class="cct-muted">—</span>'; ?></td>
-						<td><?php echo $d['casino']['brandfinder_analysis_id'] ? '#' . (int) $d['casino']['brandfinder_analysis_id'] : '<span class="cct-muted">—</span>'; ?></td>
-						<td><?php echo esc_html( human_time_diff( get_post_modified_time( 'U', true, $p ) ) . ' ' . __( 'ago', 'casinos-cc-tools' ) ); ?></td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
-			</table>
+			<?php $table->views(); ?>
+			<form method="get" class="cct-list-form">
+				<input type="hidden" name="page" value="<?php echo esc_attr( self::SLUG ); ?>">
+				<?php if ( ! empty( $_REQUEST['status'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification ?>
+					<input type="hidden" name="status" value="<?php echo esc_attr( sanitize_key( wp_unslash( $_REQUEST['status'] ) ) ); // phpcs:ignore ?>">
+				<?php endif; ?>
+				<?php $table->search_box( __( 'Search casinos', 'casinos-cc-tools' ), 'cct-search' ); ?>
+				<?php $table->display(); ?>
+			</form>
 			<p class="description"><?php esc_html_e( '“Insert & preview” places the tool after the first heading of the casino’s Bonuses or Withdrawal page, visible only to logged-in editors. “Go live” shows it to everyone. You can still add [cc_wagering_calculator] or [cc_withdrawal_checker] by hand instead; a page that already has a tool is left alone.', 'casinos-cc-tools' ); ?></p>
-			<?php endif; ?>
 		</div>
 		<?php
 	}

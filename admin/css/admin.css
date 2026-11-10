@@ -46,3 +46,7 @@
 .cct-admin .cct-place__remove{color:#b32d2e}
 .cct-admin .cct-side .cct-place__name{display:block}
 .cct-admin .cct-bulk .button{margin-left:8px;vertical-align:middle}
+.cct-admin .cct-list-form .tablenav .actions select{max-width:230px}
+.cct-admin .wp-list-table .column-casino{width:22%}
+.cct-admin .wp-list-table .column-tools{width:34%}
+.cct-admin .wp-list-table .column-checked,.cct-admin .wp-list-table .column-bf,.cct-admin .wp-list-table .column-modified{width:9%}
