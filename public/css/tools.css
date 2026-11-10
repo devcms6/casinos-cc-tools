@@ -9,6 +9,9 @@
 .cct-widget--boxed{background:#ecf1f3;border-radius:20px;padding:24px}
 .cct-widget *,.cct-widget *::before,.cct-widget *::after{box-sizing:border-box}
 .cct-widget .fw-b{font-weight:700}
+.cct-widget .cct-label{display:inline-flex;align-items:center;gap:7px;margin:0 0 12px;padding:5px 12px 5px 10px;font-size:12px;font-weight:700;line-height:1.2;letter-spacing:.02em;color:#0e1f42;background:#fff;border:1px solid #d3d9dc;border-radius:999px}
+.cct-widget .cct-label__dot{width:8px;height:8px;border-radius:50%;background:#55c3f9;flex:none}
+.cct-widget[data-cct="withdrawal"] .cct-label__dot{background:#31c640}
 
 .cct-widget .cct{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:20px;align-items:start}
 .cct-widget .cct__card{background:#fff;border-radius:12px;padding:22px 24px;min-width:0}

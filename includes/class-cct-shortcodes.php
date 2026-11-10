@@ -53,6 +53,7 @@ class CCT_Shortcodes {
 			'title'  => '',
 			'intro'  => '',
 			'boxed'  => '',
+			'label'  => '', // custom label text, or "no" to hide it
 		), $atts );
 
 		if ( ! in_array( $type, array( 'wagering', 'withdrawal' ), true ) ) {

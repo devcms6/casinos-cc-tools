@@ -91,6 +91,7 @@ The page content is never edited: the tool is added to the finished page HTML, s
 | `[cc_tool type="wagering"]` | Generic form |
 | `casino="golazzo-casino"` | Optional on all: use a specific profile |
 | `title="…"` `intro="…"` | Optional heading and intro text above the tool |
+| `label="…"` | Replace the small label above the tool ("Bonus wagering calculator" / "Withdrawal estimation tool"), or `label="no"` to hide it |
 | `boxed="yes"` | Grey panel behind the tool, for pages where it isn't already inside a grey content box |
 
 If a profile is missing, a draft, or has the tool switched off, the shortcode prints nothing for visitors and a short notice for logged-in editors.

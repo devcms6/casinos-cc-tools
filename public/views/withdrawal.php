@@ -15,6 +15,12 @@ $type_labels   = array(
 );
 ?>
 <div class="<?php echo esc_attr( $class ); ?>" data-cct="withdrawal" id="<?php echo esc_attr( $uid ); ?>">
+	<?php
+	$cct_label = trim( (string) $atts['label'] );
+	if ( ! in_array( strtolower( $cct_label ), array( 'no', 'none', '0', 'false' ), true ) ) :
+		$cct_label = '' !== $cct_label ? $cct_label : __( 'Withdrawal estimation tool', 'casinos-cc-tools' );
+		?><div class="cct-label"><span class="cct-label__dot" aria-hidden="true"></span><?php echo esc_html( $cct_label ); ?></div>
+	<?php endif; ?>
 	<?php if ( $atts['title'] ) : ?><h2><?php echo esc_html( $atts['title'] ); ?></h2><?php endif; ?>
 	<?php if ( $atts['intro'] ) : ?><p><?php echo esc_html( $atts['intro'] ); ?></p><?php endif; ?>
 
