@@ -39,6 +39,28 @@ That's the only manual upload. After this, updates come from GitHub.
 
 Every save and import keeps a revision, so you can roll a casino back from its edit screen.
 
+## Bonus finder
+
+`[cc_bonus_finder]` compares the deposit bonuses of every published casino profile for the visitor's deposit. Put it on any page, for example the main Bonuses page.
+
+- **Deposit slider** from 10 to 5,000 (growing steps), plus deposit method, maximum wagering (10x–40x), sort (best value, biggest bonus, least to wager, lowest minimum deposit) and offer type (welcome, reloads, high roller).
+- Each result shows the bonus, the total to wager, days and max bet, and the expected value at 96% RTP, with **Calculate** (the casino's Bonuses page) and **Review** links.
+- The first results are in the page HTML, so they show before JavaScript loads and search engines can read them.
+- Data is cached and refreshed automatically whenever a profile is saved, imported, published, unpublished or deleted. Casinos need a linked, published review page to appear.
+
+| Attribute | Default | Notes |
+|---|---|---|
+| `deposit` | `100` | Starting deposit, snapped to the nearest slider step |
+| `type` | all | `welcome`, `reload` or `highroller` |
+| `wagering` | any | `10`, `20`, `25`, `30`, `35` or `40` |
+| `sort` | `value` | `value`, `bonus`, `wager` or `min` |
+| `per_casino` | `yes` | `no` lists every offer, not just each casino's best |
+| `limit` | `10` | Results before "Show more" |
+| `currency` | `EUR` | Which profiles to include |
+| `title`, `intro` | – | Optional heading and intro text |
+
+Example: `[cc_bonus_finder type="welcome" wagering="35" limit="15"]`
+
 ## The Casinos list
 
 Casino Tools → Casinos is a standard WordPress list:
